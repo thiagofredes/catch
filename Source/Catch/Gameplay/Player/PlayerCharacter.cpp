@@ -4,12 +4,14 @@
 #include "PlayerCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "CatchPlayerController.h"
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "InputActionValue.h"
+#include "InputMappingContext.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -40,31 +42,11 @@ APlayerCharacter::APlayerCharacter()
 	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
 }
 
-// Called when the game starts or when spawned
-void APlayerCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// if this character is controlled by a human player
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
-	{
-		// if this is a game instance not running in a dedicated server
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			if (DefaultMappingContext)
-			{
-				Subsystem->AddMappingContext(DefaultMappingContext, 0);
-			}
-		}
-	}
-	
-}
-
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	
 	// secure casting to modern enhanced input component
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
@@ -85,11 +67,29 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Look);
 		}
 	}
+}
 
+void APlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// get the player controller assigned to this character
+	ACatchPlayerController* PlayerController = Cast<ACatchPlayerController>(GetController());
+
+	// get the enhanced input subsystem from the local player
+	if (PlayerController) {
+		UEnhancedInputLocalPlayerSubsystem* Subsystem =
+			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+
+		if (Subsystem && InputMappingContext)
+		{
+			// adds to the enhanced input player subsystem the mapping context for this character
+			Subsystem->AddMappingContext(InputMappingContext, 0);
+		}
+	}
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value) {
-	
 	// gets input 2d vector (wasd or left analog)
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -105,13 +105,12 @@ void APlayerCharacter::Move(const FInputActionValue& Value) {
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
 		// applies native character movement component's movement forces
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+		AddMovementInput(ForwardDirection, MovementVector.X);
+		AddMovementInput(RightDirection, MovementVector.Y);
 	}
 }
 
 void APlayerCharacter::Look(const FInputActionValue& Value) {
-	
 	// gets input 2d vector (mouse or right analog)
 	const FVector2D LookAxisVector = Value.Get<FVector2D>();
 
