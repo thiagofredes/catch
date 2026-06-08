@@ -26,8 +26,6 @@ protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual void PossessedBy(AController* AController) override;
-
 	virtual void BeginPlay() override;
 
 	// movement
