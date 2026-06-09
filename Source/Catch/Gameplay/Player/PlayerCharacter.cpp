@@ -120,3 +120,22 @@ void APlayerCharacter::Look(const FInputActionValue& Value) {
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+void APlayerCharacter::Jump() {
+	Super::Jump();
+
+	OnPlayerJumped.Broadcast();
+}
+
+void APlayerCharacter::Landed(const FHitResult& Hit) {
+	Super::Landed(Hit);
+
+	OnPlayerLanded.Broadcast();
+}
+
+void APlayerCharacter::Falling()
+{
+	Super::Falling();
+
+	OnPlayerFalling.Broadcast();
+}

@@ -13,6 +13,10 @@ class UInputMappingContext;
 struct FInputActionValue;
 
 
+DECLARE_MULTICAST_DELEGATE(FOnPlayerJumpedSignature);
+DECLARE_MULTICAST_DELEGATE(FOnPlayerLandedSignature);
+DECLARE_MULTICAST_DELEGATE(FOnPlayerFallingSignature);
+
 UCLASS(Abstract, Blueprintable)
 class CATCH_API APlayerCharacter : public ACharacter
 {
@@ -21,6 +25,14 @@ class CATCH_API APlayerCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
+
+	FOnPlayerJumpedSignature OnPlayerJumped;
+	FOnPlayerLandedSignature OnPlayerLanded;
+	FOnPlayerFallingSignature OnPlayerFalling;
+
+	virtual void Jump() override;
+	virtual void Landed(const FHitResult& Hit) override;
+	virtual void Falling() override;
 
 protected:
 	// Called to bind functionality to input
