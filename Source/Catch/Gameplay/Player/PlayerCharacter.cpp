@@ -121,8 +121,8 @@ void APlayerCharacter::Look(const FInputActionValue& Value) {
 	}
 }
 
-void APlayerCharacter::Jump() {
-	Super::Jump();
+void APlayerCharacter::OnJumped_Implementation() {
+	Super::OnJumped_Implementation();
 
 	OnPlayerJumped.Broadcast();
 }

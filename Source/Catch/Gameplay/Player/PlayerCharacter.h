@@ -30,7 +30,7 @@ public:
 	FOnPlayerLandedSignature OnPlayerLanded;
 	FOnPlayerFallingSignature OnPlayerFalling;
 
-	virtual void Jump() override;
+	virtual void OnJumped_Implementation() override;
 	virtual void Landed(const FHitResult& Hit) override;
 	virtual void Falling() override;
 
