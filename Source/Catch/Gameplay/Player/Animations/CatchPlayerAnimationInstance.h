@@ -38,6 +38,9 @@ protected:
 	bool IsPlayerFalling;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Animation")
+	bool IsPlayerFallingFromJump;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Animation")
 	bool IsPlayerLanded;
 
 private:
@@ -46,4 +49,6 @@ private:
 	void PlayerLanded();
 
 	void PlayerFalling();
+
+	void PlayerFallingFromJump();
 };

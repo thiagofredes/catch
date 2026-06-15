@@ -35,11 +35,12 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false; //camera's rotation is dependant on the arm
 
-	GetCharacterMovement()->bOrientRotationToMovement = true; // character turns to the movement's direction
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // body's rotation speed
-	GetCharacterMovement()->JumpZVelocity = 600.0f;
-	GetCharacterMovement()->AirControl = 0.5f; // partial air control
-	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+	PlayerMovementComponent = GetCharacterMovement();
+	PlayerMovementComponent->bOrientRotationToMovement = true; // character turns to the movement's direction
+	PlayerMovementComponent->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // body's rotation speed
+	PlayerMovementComponent->JumpZVelocity = 600.0f;
+	PlayerMovementComponent->AirControl = 0.5f; // partial air control
+	PlayerMovementComponent->MaxWalkSpeed = 500.0f;
 }
 
 // Called to bind functionality to input
@@ -121,10 +122,19 @@ void APlayerCharacter::Look(const FInputActionValue& Value) {
 	}
 }
 
-void APlayerCharacter::OnJumped_Implementation() {
-	Super::OnJumped_Implementation();
+void APlayerCharacter::Jump() {
+	Super::Jump();
+
+	PlayerMovementComponent->bNotifyApex = true;
 
 	OnPlayerJumped.Broadcast();
+}
+
+void APlayerCharacter::NotifyJumpApex()
+{
+	Super::NotifyJumpApex();
+
+	OnPlayerFallingFromJump.Broadcast();
 }
 
 void APlayerCharacter::Landed(const FHitResult& Hit) {
@@ -133,9 +143,15 @@ void APlayerCharacter::Landed(const FHitResult& Hit) {
 	OnPlayerLanded.Broadcast();
 }
 
-void APlayerCharacter::Falling()
+void APlayerCharacter::OnMovementModeChanged(EMovementMode PreviousMovementMode, uint8 PreviousCustomMode)
 {
-	Super::Falling();
+	Super::OnMovementModeChanged(PreviousMovementMode, PreviousCustomMode);
 
-	OnPlayerFalling.Broadcast();
+	EMovementMode CurrentMode = PlayerMovementComponent->MovementMode;
+
+	if (CurrentMode == MOVE_Falling) {
+		if(!bPressedJump) {
+			OnPlayerFalling.Broadcast();
+		}
+	}
 }

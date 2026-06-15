@@ -16,6 +16,7 @@ struct FInputActionValue;
 DECLARE_MULTICAST_DELEGATE(FOnPlayerJumpedSignature);
 DECLARE_MULTICAST_DELEGATE(FOnPlayerLandedSignature);
 DECLARE_MULTICAST_DELEGATE(FOnPlayerFallingSignature);
+DECLARE_MULTICAST_DELEGATE(FOnPlayerFallingFromJumpSignature);
 
 UCLASS(Abstract, Blueprintable)
 class CATCH_API APlayerCharacter : public ACharacter
@@ -29,10 +30,12 @@ public:
 	FOnPlayerJumpedSignature OnPlayerJumped;
 	FOnPlayerLandedSignature OnPlayerLanded;
 	FOnPlayerFallingSignature OnPlayerFalling;
+	FOnPlayerFallingFromJumpSignature OnPlayerFallingFromJump;
 
-	virtual void OnJumped_Implementation() override;
+	virtual void Jump() override;
 	virtual void Landed(const FHitResult& Hit) override;
-	virtual void Falling() override;
+	virtual void NotifyJumpApex() override;
+	virtual void OnMovementModeChanged(EMovementMode PreviousMovementMode, uint8 PreviousCustomMode) override;
 
 protected:
 	// Called to bind functionality to input
@@ -56,6 +59,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> FollowCamera;
 
+	TObjectPtr<UCharacterMovementComponent> PlayerMovementComponent;
 
 	// input action for moving
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))

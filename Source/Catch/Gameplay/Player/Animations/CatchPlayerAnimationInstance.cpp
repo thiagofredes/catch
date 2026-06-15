@@ -17,13 +17,15 @@ void UCatchPlayerAnimationInstance::NativeInitializeAnimation()
 		PlayerCharacter->OnPlayerJumped.AddUObject(this, &UCatchPlayerAnimationInstance::PlayerJumped);
 		PlayerCharacter->OnPlayerLanded.AddUObject(this, &UCatchPlayerAnimationInstance::PlayerLanded);
 		PlayerCharacter->OnPlayerFalling.AddUObject(this, &UCatchPlayerAnimationInstance::PlayerFalling);
+		PlayerCharacter->OnPlayerFallingFromJump.AddUObject(this, &UCatchPlayerAnimationInstance::PlayerFallingFromJump);
 
 		PlayerCharacterMovementComponent = PlayerCharacter->GetCharacterMovement();
 	}
 
 	IsPlayerJumping = false;
-	IsPlayerLanded = true;
 	IsPlayerFalling = false;
+	IsPlayerFallingFromJump = false;
+	IsPlayerLanded = true;
 }
 
 void UCatchPlayerAnimationInstance::NativeUpdateAnimation(float DeltaTimeX)
@@ -36,16 +38,29 @@ void UCatchPlayerAnimationInstance::NativeUpdateAnimation(float DeltaTimeX)
 }
 
 void UCatchPlayerAnimationInstance::PlayerJumped() {
+	IsPlayerFalling = false;
+	IsPlayerFallingFromJump = false;
 	IsPlayerLanded = false;
 	IsPlayerJumping = true;
 }
 
 void UCatchPlayerAnimationInstance::PlayerLanded() {
 	IsPlayerFalling = false;
+	IsPlayerFallingFromJump = false;
 	IsPlayerJumping = false;
 	IsPlayerLanded = true;
 }
 
 void UCatchPlayerAnimationInstance::PlayerFalling() {
+	IsPlayerLanded = false;
+	IsPlayerJumping = false;
+	IsPlayerFallingFromJump = false;
 	IsPlayerFalling = true;
+}
+
+void UCatchPlayerAnimationInstance::PlayerFallingFromJump() {
+	IsPlayerLanded = false;
+	IsPlayerJumping = false;
+	IsPlayerFalling = false;
+	IsPlayerFallingFromJump = true;
 }
