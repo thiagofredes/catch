@@ -17,9 +17,12 @@ ACollectable::ACollectable()
 	SphereCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	SphereCollider->SetGenerateOverlapEvents(true);
 	SphereCollider->SetCollisionProfileName(TEXT("Trigger"));
+	SphereCollider->SetCollisionResponseToChannel(ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	CollectableMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CollectableMesh"));
 	CollectableMesh->SetupAttachment(SphereCollider);
+	CollectableMesh->SetGenerateOverlapEvents(false);
+	CollectableMesh->SetCollisionProfileName(TEXT("NoCollision"));
 }
 
 // Called when the game starts or when spawned
