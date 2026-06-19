@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "CatchPlayerController.h"
 #include "Components/InputComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -41,6 +42,9 @@ APlayerCharacter::APlayerCharacter()
 	PlayerMovementComponent->JumpZVelocity = 600.0f;
 	PlayerMovementComponent->AirControl = 0.5f; // partial air control
 	PlayerMovementComponent->MaxWalkSpeed = 500.0f;
+
+	GetCapsuleComponent()->SetGenerateOverlapEvents(true);
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
 }
 
 // Called to bind functionality to input
