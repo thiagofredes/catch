@@ -30,8 +30,6 @@ void UCollectablesManagerSubsystem::RegisterCollectable(ACollectable* Collectabl
 		// increases both counters manually as there may be a situation when collectables are added mid-game
 		TotalCollectables++;
 		RemainingCollectables++;
-
-		UE_LOG(LogTemp, Warning, TEXT("Collectable registered: %s! Remaining in level: %d / %d"), *Collectable->GetName(), RemainingCollectables, TotalCollectables);
 	}
 }
 
@@ -56,6 +54,4 @@ void UCollectablesManagerSubsystem::OnCollectableGot(ACollectable* Collectable)
 
 	//trigger gameplay effects or notify other systems here before destroying
 	UnregisterCollectable(Collectable);
-
-	UE_LOG(LogTemp, Warning, TEXT("Collectable got! Remaining in level: %d / %d"), RemainingCollectables, TotalCollectables);
 }
