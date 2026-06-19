@@ -13,6 +13,8 @@ ACatchGameMode::ACatchGameMode()
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
 	GameStateClass = ACatchGameState::StaticClass();
+
+	UE_LOG(LogTemp, Warning, TEXT("Game Mode constructed!"));
 }
 
 void ACatchGameMode::BeginPlay()
@@ -33,6 +35,8 @@ void ACatchGameMode::BeginPlay()
 			true   // Loop the timer
 		);
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Game Mode BeginPlay!"));
 }
 
 void ACatchGameMode::UpdateStageTimer()
