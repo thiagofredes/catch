@@ -26,7 +26,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	// The initial stage time duration in seconds (exposed to Blueprints to tweak per level)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Rules", meta = (ClampMin = "2.0", ClampMax = "5.0"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Rules", meta = (ClampMin = "5.0"))
 	float LevelDuration;
 
 	// Target amount of items needed to complete this level

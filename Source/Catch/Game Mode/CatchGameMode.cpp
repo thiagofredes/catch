@@ -5,8 +5,7 @@
 #include "../Game State/CatchGameState.h"
 
 ACatchGameMode::ACatchGameMode()
-	: LevelDuration(60.0f)
-	, TargetItemsForLevelCompletion(10)
+	: TargetItemsForLevelCompletion(10)
 	, CatchGameState(nullptr)
 {
 	PrimaryActorTick.bCanEverTick = false;
