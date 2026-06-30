@@ -7,6 +7,7 @@
 #include "CatchPlayerController.generated.h"
 
 class UInputMappingContext;
+class APlayerCharacter;
 
 UCLASS()
 class CATCH_API ACatchPlayerController : public APlayerController
@@ -19,4 +20,9 @@ public:
 protected:
 	void BeginPlay() override;
 	void SetupInputComponent() override;
+
+private:
+	void HandleGameOver();
+
+	APlayerCharacter* Character;
 };
