@@ -131,6 +131,12 @@ void APlayerCharacter::StopAllAnimations()
 	GetMesh()->bPauseAnims = true;
 }
 
+void APlayerCharacter::StopMovement()
+{
+	PlayerMovementComponent->DisableMovement();
+	PlayerMovementComponent->StopMovementImmediately();
+}
+
 void APlayerCharacter::Jump() {
 	Super::Jump();
 

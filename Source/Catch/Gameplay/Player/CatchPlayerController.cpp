@@ -36,14 +36,9 @@ void ACatchPlayerController::HandleGameOver()
 	DisableInput(this);
 
 	if (Character) {
-		UCharacterMovementComponent* CharacterMovement = Character->GetCharacterMovement();
-
-		if (CharacterMovement)
-		{
-			CharacterMovement->StopMovementImmediately();
-			CharacterMovement->DisableMovement();
-		}
-		
+		Character->StopMovement();
 		Character->StopAllAnimations();
 	}
+
+	SetIgnoreLookInput(true);
 }
