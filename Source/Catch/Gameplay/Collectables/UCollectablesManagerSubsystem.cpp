@@ -30,6 +30,8 @@ void UCollectablesManagerSubsystem::RegisterCollectable(ACollectable* Collectabl
 		// increases both counters manually as there may be a situation when collectables are added mid-game
 		TotalCollectables++;
 		RemainingCollectables++;
+
+		OnCollectableCountChanged.Broadcast(TotalCollectables);
 	}
 }
 
@@ -52,6 +54,8 @@ void UCollectablesManagerSubsystem::OnCollectableGot(ACollectable* Collectable)
 {
 	if (!Collectable) return;
 
+	OnItemCollected.Broadcast();
+	
 	//trigger gameplay effects or notify other systems here before destroying
 	UnregisterCollectable(Collectable);
 }

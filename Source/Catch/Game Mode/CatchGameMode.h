@@ -19,18 +19,25 @@ class CATCH_API ACatchGameMode : public AGameModeBase
 public:
 	ACatchGameMode();
 
-	// Called actively by the Collectables Manager
+	// Called actively by the Collectables Manager whenever the player gets a collectable item.
 	void OnItemCollected();
+
+	// Called actively by the Collectables Manager whenever a collectable item is registered.
+	void OnItemRegistered(int32 Count);
+
 	
 protected:
+	virtual void StartPlay() override;
+
 	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	// The initial stage time duration in seconds (exposed to Blueprints to tweak per level)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Rules", meta = (ClampMin = "5.0"))
 	float LevelDuration;
 
 	// Target amount of items needed to complete this level
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Rules", meta = (ClampMin = "1"))
 	int32 TargetItemsForLevelCompletion;
 
 private:
@@ -43,10 +50,20 @@ private:
 	// Triggers Next Stage sequence.
 	void HandleVictory();
 
+	// Subscribe to important events
+	void SubscribeToEvents();
+
+	// Unsubscribe to important events
+	void UnsubscribeToEvents();
+
 	// Cached pointer to avoid expensive casting during runtime.
 	UPROPERTY()
 	TObjectPtr<ACatchGameState> CatchGameState;
 
 	// Timer handle for the 1-second interval update loop
 	FTimerHandle TimerHandle_StageCountdown;
+
+	FDelegateHandle OnItemCollectedHandle;
+
+	FDelegateHandle OnItemRegisteredHandle;
 };

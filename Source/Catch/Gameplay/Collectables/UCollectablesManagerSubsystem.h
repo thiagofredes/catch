@@ -8,6 +8,9 @@
 
 class ACollectable;
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnCollectableCountChanged, int32 /*Count*/);
+DECLARE_MULTICAST_DELEGATE(FOnItemCollected);
+
 /**
  * 
  */
@@ -33,12 +36,21 @@ public:
 	// Event called when a collectable is successfully gotten by the player.
 	void OnCollectableGot(ACollectable* Collectable);
 
+	// Event to notify GameMode that a change in the total number of collectables has happened
+	FOnCollectableCountChanged OnCollectableCountChanged;
+
+	// Event to notify GameMode that a collectable has been collected
+	FOnItemCollected OnItemCollected;
+
 private:
 
 	// tracked collection using weak pointers to prevent garbage collection blocking or memory leaks
 	UPROPERTY()
 	TArray<TWeakObjectPtr<ACollectable>> ActiveCollectables;
 
+	// Total number of collectables in the lavel, ever
 	int32 TotalCollectables = 0;
+
+	// Remaining collectables that have not been collected yet
 	int32 RemainingCollectables = 0;
 };

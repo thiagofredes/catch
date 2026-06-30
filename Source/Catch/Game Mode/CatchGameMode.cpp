@@ -3,24 +3,63 @@
 
 #include "CatchGameMode.h"
 #include "../Game State/CatchGameState.h"
+#include "../Gameplay/Collectables/UCollectablesManagerSubsystem.h"
 
 ACatchGameMode::ACatchGameMode()
-	: TargetItemsForLevelCompletion(10)
-	, CatchGameState(nullptr)
+	: CatchGameState(nullptr)
 {
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
 	GameStateClass = ACatchGameState::StaticClass();
 
-	UE_LOG(LogTemp, Warning, TEXT("Game Mode constructed!"));
+	SubscribeToEvents();
+}
+
+void ACatchGameMode::SubscribeToEvents()
+{
+	UWorld* World = GetWorld();
+
+	if (!World) return;
+
+	// Get the subsystem instance for this world lifecycle
+	UCollectablesManagerSubsystem* CollectablesSubsystem = World->GetSubsystem<UCollectablesManagerSubsystem>();
+
+	if (CollectablesSubsystem)
+	{
+		// Bind to the subsystem event
+		OnItemCollectedHandle = CollectablesSubsystem->OnItemCollected.AddUObject(this, &ACatchGameMode::OnItemCollected);
+		OnItemRegisteredHandle = CollectablesSubsystem->OnCollectableCountChanged.AddUObject(this, &ACatchGameMode::OnItemRegistered);
+	}
+}
+
+void ACatchGameMode::UnsubscribeToEvents()
+{
+	UWorld* World = GetWorld();
+
+	if (!World) return;
+
+	// Get the subsystem instance for this world lifecycle
+	UCollectablesManagerSubsystem* CollectablesSubsystem = World->GetSubsystem<UCollectablesManagerSubsystem>();
+
+	if (CollectablesSubsystem)
+	{
+		// Bind to the subsystem event
+		CollectablesSubsystem->OnCollectableCountChanged.Remove(OnItemRegisteredHandle);
+		CollectablesSubsystem->OnItemCollected.Remove(OnItemCollectedHandle);
+	}
+}
+
+void ACatchGameMode::StartPlay()
+{
+	CatchGameState = GetGameState<ACatchGameState>();
+	
+	Super::StartPlay();
 }
 
 void ACatchGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	CatchGameState = GetGameState<ACatchGameState>();
 
 	if (CatchGameState)
 	{
@@ -34,8 +73,12 @@ void ACatchGameMode::BeginPlay()
 			true   // Loop the timer
 		);
 	}
+}
 
-	UE_LOG(LogTemp, Warning, TEXT("Game Mode BeginPlay!"));
+void ACatchGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	UnsubscribeToEvents();
 }
 
 void ACatchGameMode::UpdateStageTimer()
@@ -63,6 +106,15 @@ void ACatchGameMode::OnItemCollected()
 		GetWorldTimerManager().ClearTimer(TimerHandle_StageCountdown);
 		HandleVictory();
 	}
+}
+
+void ACatchGameMode::OnItemRegistered(int32 Count)
+{
+	if (!CatchGameState) return;
+
+	TargetItemsForLevelCompletion = Count;
+
+	CatchGameState->SetTotalItems(TargetItemsForLevelCompletion);
 }
 
 void ACatchGameMode::HandleGameOver()

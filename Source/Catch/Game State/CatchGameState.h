@@ -23,6 +23,9 @@ public:
 	// Increments the count of items collected by the player
 	void IncrementItemsCollected();
 
+	// Sets the total number of items in the world
+	void SetTotalItems(int32 Count);
+
 	// Technical Blueprint Getters for UI binding without performance overhead
 	UFUNCTION(BlueprintPure, Category = "Catch|State")
 	FORCEINLINE float GetTimeRemaining() const { return TimeRemaining; }
@@ -38,4 +41,7 @@ private:
 	// How many target items the player has collected so far
 	UPROPERTY(Transient, BlueprintReadOnly, Category = "Catch|State", meta = (AllowPrivateAccess = "true"))
 	int32 ItemsCollected;
+
+	// How many target items are in this world
+	int32 TotalItems;
 };
