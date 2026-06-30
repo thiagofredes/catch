@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "CatchGameMode.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnGameOver);
+
 class ACatchGameState;
 
 /**
@@ -25,6 +27,8 @@ public:
 	// Called actively by the Collectables Manager whenever a collectable item is registered.
 	void OnItemRegistered(int32 Count);
 
+	// Event triggered when the level ends
+	FOnGameOver OnGameOver;
 	
 protected:
 	virtual void StartPlay() override;
@@ -55,6 +59,9 @@ private:
 
 	// Unsubscribe to important events
 	void UnsubscribeToEvents();
+
+	// Ends the level
+	void EndGame();
 
 	// Cached pointer to avoid expensive casting during runtime.
 	UPROPERTY()

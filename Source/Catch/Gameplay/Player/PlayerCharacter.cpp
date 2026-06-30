@@ -126,6 +126,11 @@ void APlayerCharacter::Look(const FInputActionValue& Value) {
 	}
 }
 
+void APlayerCharacter::StopAllAnimations()
+{
+	GetMesh()->bPauseAnims = true;
+}
+
 void APlayerCharacter::Jump() {
 	Super::Jump();
 

@@ -121,6 +121,8 @@ void ACatchGameMode::HandleGameOver()
 	GetWorldTimerManager().ClearTimer(TimerHandle_StageCountdown);
 
 	UE_LOG(LogTemp, Warning, TEXT("Game Over!"));
+
+	EndGame();
 }
 
 void ACatchGameMode::HandleVictory()
@@ -128,4 +130,11 @@ void ACatchGameMode::HandleVictory()
 	GetWorldTimerManager().ClearTimer(TimerHandle_StageCountdown);
 
 	UE_LOG(LogTemp, Warning, TEXT("Victory!"));
+
+	EndGame();
+}
+
+void ACatchGameMode::EndGame()
+{
+	OnGameOver.Broadcast();
 }

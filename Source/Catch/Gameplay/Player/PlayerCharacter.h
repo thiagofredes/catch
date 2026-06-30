@@ -37,6 +37,9 @@ public:
 	virtual void NotifyJumpApex() override;
 	virtual void OnMovementModeChanged(EMovementMode PreviousMovementMode, uint8 PreviousCustomMode) override;
 
+	// Stops all animations on this character
+	void StopAllAnimations();
+
 protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
