@@ -103,7 +103,6 @@ void ACatchGameMode::OnItemCollected()
 
 	if (CatchGameState->GetItemsCollected() >= TargetItemsForLevelCompletion)
 	{
-		GetWorldTimerManager().ClearTimer(TimerHandle_StageCountdown);
 		HandleVictory();
 	}
 }
@@ -119,10 +118,14 @@ void ACatchGameMode::OnItemRegistered(int32 Count)
 
 void ACatchGameMode::HandleGameOver()
 {
+	GetWorldTimerManager().ClearTimer(TimerHandle_StageCountdown);
+
 	UE_LOG(LogTemp, Warning, TEXT("Game Over!"));
 }
 
 void ACatchGameMode::HandleVictory()
 {
+	GetWorldTimerManager().ClearTimer(TimerHandle_StageCountdown);
+
 	UE_LOG(LogTemp, Warning, TEXT("Victory!"));
 }
