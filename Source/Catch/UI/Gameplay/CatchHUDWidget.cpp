@@ -2,12 +2,24 @@
 
 
 #include "CatchHUDWidget.h"
+#include "../../Game State/CatchGameState.h"
 #include "Components/TextBlock.h"
+#include "Kismet/GameplayStatics.h"
 
 
 void UCatchHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	ACatchGameState* GameState = Cast<ACatchGameState>(UGameplayStatics::GetGameState(GetWorld()));
+
+	if (GameState)
+	{
+		GameState->OnTimeUpdated.AddUObject(this, &UCatchHUDWidget::UpdateTimeRemaining);
+		GameState->OnCollectableItemsUpdated.AddUObject(this, &UCatchHUDWidget::UpdateItemCounters);
+		UpdateTimeRemaining(GameState->GetTimeRemaining());
+		UpdateItemCounters(GameState->GetItemsCollected(), GameState->GetTotalItems());
+	}
 }
 
 void UCatchHUDWidget::UpdateTimeRemaining(float NewTime)

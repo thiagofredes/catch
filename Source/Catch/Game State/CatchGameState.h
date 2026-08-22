@@ -6,6 +6,10 @@
 #include "GameFramework/GameStateBase.h"
 #include "CatchGameState.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnTimeUpdated, float);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnCollectableItemsUpdated, int32, int32);
+
+
 /**
  *
  */
@@ -32,6 +36,11 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Catc|State")
 	FORCEINLINE int32 GetItemsCollected() const { return ItemsCollected; }
+
+	FORCEINLINE int32 GetTotalItems() const { return TotalItems; }
+
+	FOnTimeUpdated OnTimeUpdated;
+	FOnCollectableItemsUpdated OnCollectableItemsUpdated;
 
 private:
 	// Current time left in seconds for the stage
