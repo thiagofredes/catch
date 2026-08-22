@@ -7,6 +7,7 @@
 
 void UCatchHUDWidget::NativeConstruct()
 {
+	Super::NativeConstruct();
 }
 
 void UCatchHUDWidget::UpdateTimeRemaining(float NewTime)
