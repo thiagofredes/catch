@@ -17,6 +17,7 @@ void ACatchGameState::SetTimeRemaining(float NewTime)
 	TimeRemaining = NewTime;
 
 	UE_LOG(LogTemp, Warning, TEXT("Time Remaining: %f"), TimeRemaining);
+	OnTimeUpdated.Broadcast(TimeRemaining);
 }
 
 void ACatchGameState::IncrementItemsCollected()
@@ -24,6 +25,7 @@ void ACatchGameState::IncrementItemsCollected()
 	ItemsCollected++;
 
 	UE_LOG(LogTemp, Warning, TEXT("Items Collected: %d / %d"), ItemsCollected, TotalItems);
+	OnCollectableItemsUpdated.Broadcast(ItemsCollected, TotalItems);
 }
 
 void ACatchGameState::SetTotalItems(int32 Count)
@@ -31,4 +33,5 @@ void ACatchGameState::SetTotalItems(int32 Count)
 	TotalItems = Count;
 
 	UE_LOG(LogTemp, Warning, TEXT("Total Items: %d"), TotalItems);
+	OnCollectableItemsUpdated.Broadcast(ItemsCollected, TotalItems);
 }
