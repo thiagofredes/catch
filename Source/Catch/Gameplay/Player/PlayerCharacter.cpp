@@ -13,6 +13,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "InputActionValue.h"
 #include "InputMappingContext.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -45,6 +46,8 @@ APlayerCharacter::APlayerCharacter()
 
 	GetCapsuleComponent()->SetGenerateOverlapEvents(true);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
+
+	bOnAir = false;
 }
 
 // Called to bind functionality to input
@@ -142,6 +145,13 @@ void APlayerCharacter::Jump() {
 
 	PlayerMovementComponent->bNotifyApex = true;
 
+	if (JumpSound && !bOnAir)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, JumpSound, GetActorLocation());
+	}
+
+	bOnAir = true;
+
 	OnPlayerJumped.Broadcast();
 }
 
@@ -154,6 +164,8 @@ void APlayerCharacter::NotifyJumpApex()
 
 void APlayerCharacter::Landed(const FHitResult& Hit) {
 	Super::Landed(Hit);
+
+	bOnAir = false;
 
 	OnPlayerLanded.Broadcast();
 }

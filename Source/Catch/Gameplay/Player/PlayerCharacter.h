@@ -10,6 +10,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class UInputAction;
 class UInputMappingContext;
+class USoundBase;
 struct FInputActionValue;
 
 
@@ -42,6 +43,9 @@ public:
 
 	// Stops all movement on this character
 	void StopMovement();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio")
+	TObjectPtr<USoundBase> JumpSound;
 
 protected:
 	// Called to bind functionality to input
@@ -82,4 +86,6 @@ private:
 	// input mapping context
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* InputMappingContext;
+
+	bool bOnAir;
 };
