@@ -167,7 +167,7 @@ void APlayerCharacter::Jump() {
 
 	if (JumpSound && !bOnAir)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, JumpSound, GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(this, JumpSound, GetActorLocation(), 0.5f);
 	}
 
 	bOnAir = true;
