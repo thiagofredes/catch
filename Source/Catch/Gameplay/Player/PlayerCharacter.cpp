@@ -156,7 +156,7 @@ void APlayerCharacter::PlayFootstepSound(FString Animation)
 
 	if (SelectedCue)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, SelectedCue, GetActorLocation(), 0.5f);
+		UGameplayStatics::PlaySoundAtLocation(this, SelectedCue, GetActorLocation(), FootstepSoundVolume);
 	}
 }
 
@@ -167,7 +167,7 @@ void APlayerCharacter::Jump() {
 
 	if (JumpSound && !bOnAir)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, JumpSound, GetActorLocation(), 0.5f);
+		UGameplayStatics::PlaySoundAtLocation(this, JumpSound, GetActorLocation(), JumpingSoundVolume);
 	}
 
 	bOnAir = true;
@@ -186,6 +186,11 @@ void APlayerCharacter::Landed(const FHitResult& Hit) {
 	Super::Landed(Hit);
 
 	bOnAir = false;
+
+	if (LandingSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, LandingSound, GetActorLocation(), LandingSoundVolume);
+	}
 
 	OnPlayerLanded.Broadcast();
 }

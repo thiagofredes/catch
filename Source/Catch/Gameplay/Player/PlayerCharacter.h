@@ -47,9 +47,6 @@ public:
 
 	void PlayFootstepSound(FString Animation);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio")
-	TObjectPtr<USoundBase> JumpSound;
-
 protected:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -97,6 +94,21 @@ private:
 	// running footstep sound cue
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USoundCue> RunFootstepCue;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundBase> JumpSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundBase> LandingSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	float FootstepSoundVolume = 0.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	float LandingSoundVolume = 0.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	float JumpingSoundVolume = 0.5f;
 
 	bool bOnAir;
 };
