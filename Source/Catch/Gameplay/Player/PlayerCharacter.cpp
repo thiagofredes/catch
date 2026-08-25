@@ -14,6 +14,8 @@
 #include "InputActionValue.h"
 #include "InputMappingContext.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
+
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -138,6 +140,24 @@ void APlayerCharacter::StopMovement()
 {
 	PlayerMovementComponent->DisableMovement();
 	PlayerMovementComponent->StopMovementImmediately();
+}
+
+void APlayerCharacter::PlayFootstepSound(FString Animation)
+{
+	if (!GetCharacterMovement() || GetCharacterMovement()->IsFalling())
+	{
+		return;
+	}
+
+	// TODO:
+	// This is ugly.
+	// Ideally, there would be a separate component with a mapping from animations to sound cues, but for now this will do.
+	USoundCue* SelectedCue = Animation.Contains("Run") ? RunFootstepCue : WalkFootstepCue;
+
+	if (SelectedCue)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, SelectedCue, GetActorLocation(), 0.5f);
+	}
 }
 
 void APlayerCharacter::Jump() {

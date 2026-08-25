@@ -11,6 +11,7 @@ class USpringArmComponent;
 class UInputAction;
 class UInputMappingContext;
 class USoundBase;
+class USoundCue;
 struct FInputActionValue;
 
 
@@ -43,6 +44,8 @@ public:
 
 	// Stops all movement on this character
 	void StopMovement();
+
+	void PlayFootstepSound(FString Animation);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio")
 	TObjectPtr<USoundBase> JumpSound;
@@ -86,6 +89,14 @@ private:
 	// input mapping context
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* InputMappingContext;
+
+	// walking footstep sound cue
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundCue> WalkFootstepCue;
+
+	// running footstep sound cue
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundCue> RunFootstepCue;
 
 	bool bOnAir;
 };
