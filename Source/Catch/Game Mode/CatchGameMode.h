@@ -9,6 +9,7 @@
 DECLARE_MULTICAST_DELEGATE(FOnGameOver);
 
 class ACatchGameState;
+class USoundBase;
 
 /**
  * 
@@ -41,6 +42,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Rules", meta = (ClampMin = "5.0"))
 	float LevelDuration;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio")
+	TObjectPtr<USoundBase> BGMToPlay;
+
 	// Target amount of items needed to complete this level
 	int32 TargetItemsForLevelCompletion;
 
@@ -71,6 +75,6 @@ private:
 	FTimerHandle TimerHandle_StageCountdown;
 
 	FDelegateHandle OnItemCollectedHandle;
-
+	
 	FDelegateHandle OnItemRegisteredHandle;
 };
