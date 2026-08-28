@@ -18,6 +18,9 @@ public:
 	// Sets default values for this actor's properties
 	ACollectable();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio")
+	TObjectPtr<USoundBase> CollectableSound;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

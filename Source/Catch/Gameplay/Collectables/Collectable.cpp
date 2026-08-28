@@ -6,6 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "UCollectablesManagerSubsystem.h"
 #include "../Player/PlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACollectable::ACollectable()
@@ -63,6 +64,8 @@ void ACollectable::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 	{
 		if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 		{
+			UGameplayStatics::PlaySoundAtLocation(this, CollectableSound, GetActorLocation());
+
 			if (UWorld* World = GetWorld())
 			{
 				if (UCollectablesManagerSubsystem* Manager = World->GetSubsystem<UCollectablesManagerSubsystem>())

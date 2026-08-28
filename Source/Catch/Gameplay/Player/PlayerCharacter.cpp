@@ -13,6 +13,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "InputActionValue.h"
 #include "InputMappingContext.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
+
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -45,6 +48,8 @@ APlayerCharacter::APlayerCharacter()
 
 	GetCapsuleComponent()->SetGenerateOverlapEvents(true);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
+
+	bOnAir = false;
 }
 
 // Called to bind functionality to input
@@ -137,10 +142,35 @@ void APlayerCharacter::StopMovement()
 	PlayerMovementComponent->StopMovementImmediately();
 }
 
+void APlayerCharacter::PlayFootstepSound(FString Animation)
+{
+	if (!GetCharacterMovement() || GetCharacterMovement()->IsFalling())
+	{
+		return;
+	}
+
+	// TODO:
+	// This is ugly.
+	// Ideally, there would be a separate component with a mapping from animations to sound cues, but for now this will do.
+	USoundCue* SelectedCue = Animation.Contains("Run") ? RunFootstepCue : WalkFootstepCue;
+
+	if (SelectedCue)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, SelectedCue, GetActorLocation(), FootstepSoundVolume);
+	}
+}
+
 void APlayerCharacter::Jump() {
 	Super::Jump();
 
 	PlayerMovementComponent->bNotifyApex = true;
+
+	if (JumpSound && !bOnAir)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, JumpSound, GetActorLocation(), JumpingSoundVolume);
+	}
+
+	bOnAir = true;
 
 	OnPlayerJumped.Broadcast();
 }
@@ -154,6 +184,13 @@ void APlayerCharacter::NotifyJumpApex()
 
 void APlayerCharacter::Landed(const FHitResult& Hit) {
 	Super::Landed(Hit);
+
+	bOnAir = false;
+
+	if (LandingSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, LandingSound, GetActorLocation(), LandingSoundVolume);
+	}
 
 	OnPlayerLanded.Broadcast();
 }

@@ -10,6 +10,8 @@ class UCameraComponent;
 class USpringArmComponent;
 class UInputAction;
 class UInputMappingContext;
+class USoundBase;
+class USoundCue;
 struct FInputActionValue;
 
 
@@ -42,6 +44,8 @@ public:
 
 	// Stops all movement on this character
 	void StopMovement();
+
+	void PlayFootstepSound(FString Animation);
 
 protected:
 	// Called to bind functionality to input
@@ -82,4 +86,29 @@ private:
 	// input mapping context
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* InputMappingContext;
+
+	// walking footstep sound cue
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundCue> WalkFootstepCue;
+
+	// running footstep sound cue
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundCue> RunFootstepCue;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundBase> JumpSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundBase> LandingSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	float FootstepSoundVolume = 0.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	float LandingSoundVolume = 0.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Catch|Audio", meta = (AllowPrivateAccess = "true"))
+	float JumpingSoundVolume = 0.5f;
+
+	bool bOnAir;
 };

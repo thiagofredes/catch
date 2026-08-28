@@ -4,6 +4,7 @@
 #include "CatchGameMode.h"
 #include "../Game State/CatchGameState.h"
 #include "../Gameplay/Collectables/UCollectablesManagerSubsystem.h"
+#include "../BGM/CatchBGMSubsystem.h"
 
 ACatchGameMode::ACatchGameMode()
 	: CatchGameState(nullptr)
@@ -72,6 +73,15 @@ void ACatchGameMode::BeginPlay()
 			1.0f, // Timer tick interval (1 second)
 			true   // Loop the timer
 		);
+	}
+
+	if (UGameInstance* GI = GetGameInstance())
+	{
+		if (auto* BGMSubsystem = GI->GetSubsystem<UCatchBGMSubsystem>())
+		{
+			BGMSubsystem->PlayBGM(BGMToPlay);
+			UE_LOG(LogTemp, Warning, TEXT("BGM Subsystem found and BGM started playing."));
+		}
 	}
 }
 
